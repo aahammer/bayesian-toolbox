@@ -59,7 +59,7 @@ def estimate_minimum_sample_size(
     with a specified probability, using Bayesian simulation and binary search.
     """
 
-    def simulate(sample_size: int) -> float:
+    def simulate_n_samples(sample_size: int) -> float:
         return _estimate_success_prob(
             baseline_rate,
             minimum_detectable_effect,
@@ -72,6 +72,6 @@ def estimate_minimum_sample_size(
     return binary_search(
         lo=1,
         hi=max_sample_size,
-        condition=lambda n: simulate(n) >= required_probability,
+        condition=lambda n: simulate_n_samples(n) >= required_probability,
         min_step=min_step
     )
