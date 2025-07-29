@@ -40,7 +40,7 @@ def test_evaluate_product_variants(example_variants):
         assert isinstance(result.is_reference, bool)
         
 def test_evaluate_single_variant_copies_essential_values():
-    np.random.seed(42)
+
     reference_samples = np.random.beta(10, 20, size=1000)
     rope = 0.05
     compute_comparative_stats = _make_comparative_stats_fn(reference_samples, rope)
@@ -69,8 +69,6 @@ def test_evaluate_single_variant_copies_essential_values():
 
 
 def test_sample_posterior_output_properties():
-    
-    np.random.seed(42)
      
     samples = _sample_posterior(
         conversions=50,
@@ -86,8 +84,6 @@ def test_sample_posterior_output_properties():
 
 def test_compute_posterior_stats_seeded_stable_output():
     
-    np.random.seed(42)
-    
     samples = np.random.beta(a=100, b=100, size=10000)
     stats = _compute_posterior_stats(samples)
 
@@ -100,7 +96,6 @@ def test_compute_posterior_stats_seeded_stable_output():
 
 
 def test_compute_comparative_stats_expected_outputs():
-    np.random.seed(42)
 
     reference = np.random.beta(10, 20, size=10000)
     variant = np.random.beta(10, 30, size=10000)
