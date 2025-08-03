@@ -1,15 +1,15 @@
 import pytest
 
-from product_analytics.power_analysis import binary_search
+from product_analytics.power_analysis import _binary_search
 
 import numpy as np
 import pytest
-from product_analytics.power_analysis import _estimate_success_prob,estimate_minimum_sample_size
+from product_analytics.power_analysis import _estimate_success_prob,_estimate_minimum_sample_size
 
 
 def test_detectable_effect_detected():
     # Small detectable effect, expect a non-None result
-    result = estimate_minimum_sample_size(
+    result = _estimate_minimum_sample_size(
         baseline_rate=0.05,
         minimum_detectable_effect=0.01,
     )
@@ -17,7 +17,7 @@ def test_detectable_effect_detected():
 
 def test_impossible_effect_returns_none():
     # Require unrealistic confidence for tiny effect, should return None
-    result = estimate_minimum_sample_size(
+    result = _estimate_minimum_sample_size(
         baseline_rate=0.05,
         minimum_detectable_effect=0.001,
         required_probability=0.9999,
@@ -26,18 +26,18 @@ def test_impossible_effect_returns_none():
     assert result is None
 
 def test_high_uplift_needs_smaller_sample():
-    small = estimate_minimum_sample_size(
+    small = _estimate_minimum_sample_size(
         baseline_rate=0.05,
         minimum_detectable_effect=0.05,
     )
-    large = estimate_minimum_sample_size(
+    large = _estimate_minimum_sample_size(
         baseline_rate=0.05,
         minimum_detectable_effect=0.01,
     )
     assert small < large
 
 def test_sample_size_respects_max_limit():
-    result = estimate_minimum_sample_size(
+    result = _estimate_minimum_sample_size(
         baseline_rate=0.05,
         minimum_detectable_effect=0.01,
         max_sample_size=500
@@ -49,20 +49,20 @@ def test_sample_size_respects_max_limit():
 def test_binary_search_simple_true():
     # condition becomes True from x >= 5
     cond = lambda x: x >= 5
-    assert binary_search(1, 10, cond) == 5
+    assert _binary_search(1, 10, cond) == 5
 
 def test_binary_search_immediate_true():
     # always True
-    assert binary_search(10, 20, lambda x: True) == 10
+    assert _binary_search(10, 20, lambda x: True) == 10
 
 def test_binary_search_all_false():
     # never True
-    assert binary_search(1, 5, lambda x: False) is None
+    assert _binary_search(1, 5, lambda x: False) is None
 
 def test_binary_search_exact_boundary():
     # cond(x) is True only at upper bound
     cond = lambda x: x == 100
-    assert binary_search(1, 100, cond, min_step=0) == 100
+    assert _binary_search(1, 100, cond, min_step=0) == 100
 
 def test_binary_search_min_step_stops_early():
     calls = []
@@ -71,7 +71,7 @@ def test_binary_search_min_step_stops_early():
         calls.append(x)
         return x >= 50
 
-    result = binary_search(1, 100, cond, min_step=10)
+    result = _binary_search(1, 100, cond, min_step=10)
 
     # Expect exactly these midpoints checked
     assert calls == [50, 25, 37, 43]
@@ -89,7 +89,7 @@ def test_binary_search_min_step_stops_early():
 ])
 def test_binary_search_various(lo, hi, true_at, expected):
     cond = lambda x: x >= true_at
-    assert binary_search(lo, hi, cond, min_step=0) == expected
+    assert _binary_search(lo, hi, cond, min_step=0) == expected
     
     
 def test_estimate_success_prob_with_clear_uplift():

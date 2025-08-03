@@ -82,5 +82,28 @@ Each row in the result table corresponds to one variant. The columns report Baye
 - ROPE (Region of Practical Equivalence) defines a margin within which variants are considered practically equal (deafult is 5%)
 - You can configure the ROPE width via the `rope` parameter:
   
-  ```python
-  evaluate_product_variants(variants, rope=0.02)  # 2% equivalence threshold
+```python
+evaluate_product_variants(variants, rope=0.02)  # 2% equivalence threshold
+```
+
+## 🧪 Power Analysis
+
+Estimate how many observations you need to confidently detect a desired uplift using Bayesian simulation and binary search.
+
+### 🔍 Estimate Required Sample Size
+
+```python
+from product_analytics import power_analysis
+
+sample_size = power_analysis(
+    baseline_rate=0.05,
+    minimum_detectable_effect=0.01
+)
+
+print(f"Estimated minimum sample size per variant: {sample_size}")
+```
+
+
+```shell
+Estimated minimum sample size per variant: 4003.0
+```
